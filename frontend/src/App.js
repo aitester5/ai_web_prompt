@@ -150,6 +150,7 @@ const ScanWizard = () => {
     setSelectedModel("");
     setSelectedTool("");
     setSelectedProbes([]);
+    setPromptmapDirectory("");
     setScanSession(null);
     setIsScanning(false);
     setScanOutput([]);
