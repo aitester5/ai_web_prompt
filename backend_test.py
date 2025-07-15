@@ -267,7 +267,7 @@ class LLMVulnerabilityScannerTester:
         
         # Test non-existent WebSocket session
         try:
-            ws_url = f"{self.base_url.replace('https', 'wss')}/api/ws/scan/non-existent-session"
+            ws_url = f"{self.base_url.replace('http', 'ws')}/api/ws/scan/non-existent-session"
             print(f"🔌 Testing invalid WebSocket: {ws_url}")
             
             ws = websocket.WebSocketApp(ws_url)
