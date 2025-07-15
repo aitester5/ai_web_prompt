@@ -10,7 +10,7 @@ from datetime import datetime
 from typing import Dict, List, Any
 
 class LLMVulnerabilityScannerTester:
-    def __init__(self, base_url="https://1ec2d4d4-a7d8-4432-a0ff-a68023692622.preview.emergentagent.com"):
+    def __init__(self, base_url="http://localhost:8001"):
         self.base_url = base_url
         self.api_url = f"{base_url}/api"
         self.tests_run = 0
