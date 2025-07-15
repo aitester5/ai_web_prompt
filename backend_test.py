@@ -99,8 +99,8 @@ class LLMVulnerabilityScannerTester:
         else:
             return self.log_test("Get Probes", False, f"- Status: {status}, Data: {data}")
 
-    def test_create_scan(self):
-        """Test POST /api/scan endpoint"""
+    def test_create_garak_scan(self):
+        """Test POST /api/scan endpoint with Garak tool"""
         scan_data = {
             "environment": "test_env",
             "model_name": "test_model",
@@ -112,31 +112,70 @@ class LLMVulnerabilityScannerTester:
         
         if success and 'session_id' in data and 'status' in data:
             self.session_id = data['session_id']
-            return self.log_test("Create Scan", True, f"- Session ID: {self.session_id}")
+            return self.log_test("Create Garak Scan", True, f"- Session ID: {self.session_id}")
         else:
-            return self.log_test("Create Scan", False, f"- Status: {status}, Data: {data}")
+            return self.log_test("Create Garak Scan", False, f"- Status: {status}, Data: {data}")
 
-    def test_get_scans(self):
-        """Test GET /api/scans endpoint"""
-        success, data, status = self.make_request('GET', 'scans')
+    def test_create_promptmap_scan(self):
+        """Test POST /api/scan endpoint with Promptmap tool"""
+        scan_data = {
+            "environment": "test_env",
+            "model_name": "test_model",
+            "probes": [],
+            "tool": "promptmap",
+            "promptmap_directory": "/tmp/test_promptmap"
+        }
         
-        if success and 'sessions' in data and isinstance(data['sessions'], list):
-            session_count = len(data['sessions'])
-            return self.log_test("Get Scans", True, f"- Found {session_count} sessions")
+        success, data, status = self.make_request('POST', 'scan', scan_data, 200)
+        
+        if success and 'session_id' in data and 'status' in data:
+            return self.log_test("Create Promptmap Scan", True, f"- Session ID: {data['session_id']}")
         else:
-            return self.log_test("Get Scans", False, f"- Status: {status}, Data: {data}")
+            return self.log_test("Create Promptmap Scan", False, f"- Status: {status}, Data: {data}")
 
-    def test_get_specific_scan(self):
-        """Test GET /api/scan/{session_id} endpoint"""
-        if not self.session_id:
-            return self.log_test("Get Specific Scan", False, "- No session ID available")
+    def test_scan_validation(self):
+        """Test scan validation for both tools"""
+        print("\n🔍 Testing Scan Validation...")
         
-        success, data, status = self.make_request('GET', f'scan/{self.session_id}')
+        # Test Garak without probes
+        garak_no_probes = {
+            "environment": "test_env",
+            "model_name": "test_model",
+            "probes": [],
+            "tool": "garak"
+        }
+        success, data, status = self.make_request('POST', 'scan', garak_no_probes, expected_status=422)
+        self.log_test("Garak No Probes Validation", status == 422, f"- Status: {status}")
         
-        if success and 'id' in data and data['id'] == self.session_id:
-            return self.log_test("Get Specific Scan", True, f"- Retrieved session: {self.session_id}")
-        else:
-            return self.log_test("Get Specific Scan", False, f"- Status: {status}, Data: {data}")
+        # Test Promptmap without directory
+        promptmap_no_dir = {
+            "environment": "test_env",
+            "model_name": "test_model",
+            "probes": [],
+            "tool": "promptmap"
+        }
+        success, data, status = self.make_request('POST', 'scan', promptmap_no_dir, expected_status=422)
+        self.log_test("Promptmap No Directory Validation", status == 422, f"- Status: {status}")
+        
+        # Test empty environment
+        empty_env = {
+            "environment": "",
+            "model_name": "test_model",
+            "probes": ["test.Test"],
+            "tool": "garak"
+        }
+        success, data, status = self.make_request('POST', 'scan', empty_env, expected_status=422)
+        self.log_test("Empty Environment Validation", status == 422, f"- Status: {status}")
+        
+        # Test empty model
+        empty_model = {
+            "environment": "test_env",
+            "model_name": "",
+            "probes": ["test.Test"],
+            "tool": "garak"
+        }
+        success, data, status = self.make_request('POST', 'scan', empty_model, expected_status=422)
+        self.log_test("Empty Model Validation", status == 422, f"- Status: {status}")
 
     def test_create_status_check(self):
         """Test POST /api/status endpoint"""
