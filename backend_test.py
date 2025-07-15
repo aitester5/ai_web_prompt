@@ -281,9 +281,9 @@ class LLMVulnerabilityScannerTester:
         self.test_get_probes()
         
         # Scan workflow tests
-        self.test_create_scan()
-        self.test_get_scans()
-        self.test_get_specific_scan()
+        self.test_create_garak_scan()
+        self.test_create_promptmap_scan()
+        self.test_scan_validation()
         
         # Status check tests
         self.test_create_status_check()
