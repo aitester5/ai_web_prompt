@@ -40,6 +40,7 @@ scan_sessions_table = sqlalchemy.Table(
     sqlalchemy.Column("completed_at", sqlalchemy.DateTime, nullable=True),
     sqlalchemy.Column("output_file", sqlalchemy.String, nullable=True),
     sqlalchemy.Column("error_message", sqlalchemy.String, nullable=True),
+    sqlalchemy.Column("promptmap_directory", sqlalchemy.String, nullable=True),
 )
 
 status_checks_table = sqlalchemy.Table(
