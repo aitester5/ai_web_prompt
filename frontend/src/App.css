@@ -344,6 +344,50 @@ body {
   background-color: #45a049;
 }
 
+/* Promptmap Directory */
+.promptmap-directory {
+  margin-top: 20px;
+}
+
+.directory-input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #333;
+  border-radius: 8px;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  font-size: 1em;
+  margin-bottom: 15px;
+  transition: border-color 0.3s ease;
+}
+
+.directory-input:focus {
+  outline: none;
+  border-color: #61dafb;
+}
+
+.directory-input::placeholder {
+  color: #999;
+}
+
+.directory-hint {
+  background-color: #2a2a2a;
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 4px solid #ffa500;
+}
+
+.directory-hint p {
+  margin: 5px 0;
+  color: #ccc;
+  font-size: 0.9em;
+}
+
+.directory-hint p:first-child {
+  color: #ffa500;
+  font-weight: bold;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .wizard-container {
