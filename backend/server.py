@@ -401,7 +401,8 @@ async def create_scan(scan_request: ScanRequest):
             created_at=session.created_at,
             completed_at=session.completed_at,
             output_file=session.output_file,
-            error_message=session.error_message
+            error_message=session.error_message,
+            promptmap_directory=session.promptmap_directory
         )
         await database.execute(query)
 
