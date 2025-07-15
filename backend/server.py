@@ -94,6 +94,7 @@ class ScanRequest(BaseModel):
     model_name: str
     probes: List[str]
     tool: str = "garak"  # garak or promptmap
+    promptmap_directory: Optional[str] = None  # Required when tool is promptmap
 
 class ScanSession(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
