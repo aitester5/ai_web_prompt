@@ -463,6 +463,7 @@ async def websocket_scan(websocket: WebSocket, session_id: str):
             success, error = await run_promptmap_scan(
                 session_dict["environment"],
                 session_dict["model_name"],
+                session_dict["promptmap_directory"],
                 websocket
             )
         else:
