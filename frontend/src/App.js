@@ -256,6 +256,24 @@ const ScanWizard = () => {
                 </div>
               </div>
             )}
+
+            {selectedTool === 'promptmap' && (
+              <div className="promptmap-directory">
+                <h3 className="probe-title">📁 Promptmap Directory</h3>
+                <p className="step-description">Enter the complete path to the Promptmap directory</p>
+                <input
+                  type="text"
+                  className="directory-input"
+                  placeholder="/path/to/promptmap/directory"
+                  value={promptmapDirectory}
+                  onChange={(e) => setPromptmapDirectory(e.target.value)}
+                />
+                <div className="directory-hint">
+                  <p>⚠️ Make sure the directory contains promptmap2.py</p>
+                  <p>Example: /home/user/promptmap or C:\Users\user\promptmap</p>
+                </div>
+              </div>
+            )}
           </div>
         );
 
