@@ -107,6 +107,7 @@ class ScanSession(BaseModel):
     completed_at: Optional[datetime] = None
     output_file: Optional[str] = None
     error_message: Optional[str] = None
+    promptmap_directory: Optional[str] = None
 
 # Utility functions
 async def get_conda_environments():
