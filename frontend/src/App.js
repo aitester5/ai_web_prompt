@@ -15,6 +15,7 @@ const ScanWizard = () => {
   const [selectedModel, setSelectedModel] = useState("");
   const [selectedTool, setSelectedTool] = useState("");
   const [selectedProbes, setSelectedProbes] = useState([]);
+  const [promptmapDirectory, setPromptmapDirectory] = useState("");
   const [scanSession, setScanSession] = useState(null);
   const [isScanning, setIsScanning] = useState(false);
   const [scanOutput, setScanOutput] = useState([]);
