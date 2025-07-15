@@ -378,12 +378,16 @@ async def create_scan(scan_request: ScanRequest):
         
         if scan_request.tool == "garak" and (not scan_request.probes or len(scan_request.probes) == 0):
             raise HTTPException(status_code=422, detail="At least one probe is required for Garak")
+        
+        if scan_request.tool == "promptmap" and (not scan_request.promptmap_directory or not scan_request.promptmap_directory.strip()):
+            raise HTTPException(status_code=422, detail="Promptmap directory is required for Promptmap")
 
         session = ScanSession(
             environment=scan_request.environment,
             model_name=scan_request.model_name,
             probes=scan_request.probes,
-            tool=scan_request.tool
+            tool=scan_request.tool,
+            promptmap_directory=scan_request.promptmap_directory
         )
 
         # Save session to database
