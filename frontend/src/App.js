@@ -289,6 +289,9 @@ const ScanWizard = () => {
                 {selectedTool === 'garak' && (
                   <p><strong>Probes:</strong> {selectedProbes.join(", ")}</p>
                 )}
+                {selectedTool === 'promptmap' && (
+                  <p><strong>Directory:</strong> {promptmapDirectory}</p>
+                )}
               </div>
               <div className="scan-status">
                 {isScanning ? (
