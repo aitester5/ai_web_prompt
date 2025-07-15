@@ -376,6 +376,7 @@ const ScanWizard = () => {
             disabled={
               !selectedTool || 
               (selectedTool === 'garak' && selectedProbes.length === 0) ||
+              (selectedTool === 'promptmap' && !promptmapDirectory.trim()) ||
               loading
             }
           >
