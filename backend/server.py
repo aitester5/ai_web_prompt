@@ -287,34 +287,49 @@ async def run_garak_scan(environment: str, model_name: str, probes: List[str], w
         await manager.send_personal_message(f"❌ {error_msg}", websocket)
         return False, error_msg
 
-async def run_promptmap_scan(environment: str, model_name: str, websocket: WebSocket):
+async def run_promptmap_scan(environment: str, model_name: str, promptmap_directory: str, websocket: WebSocket):
     """Run Promptmap scan with real-time output"""
     try:
         # Create the command for promptmap
         command = [
             "conda", "run", "-n", environment,
-            "python", "-m", "promptmap",
+            "python", "promptmap2.py",
             "--model", model_name,
-            "--output", f"promptmap_scan_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+            "--model-type", "ollama",
+            "--output", "results.json"
         ]
 
         # Send command info to WebSocket
         await manager.send_personal_message(f"🚀 Starting Promptmap scan...", websocket)
         await manager.send_personal_message(f"📋 Environment: {environment}", websocket)
         await manager.send_personal_message(f"🤖 Model: {model_name}", websocket)
+        await manager.send_personal_message(f"📁 Directory: {promptmap_directory}", websocket)
         await manager.send_personal_message(f"⚡ Running command: {' '.join(command)}", websocket)
+        
+        # Validate promptmap directory exists
+        if not os.path.exists(promptmap_directory):
+            await manager.send_personal_message(f"❌ Promptmap directory does not exist: {promptmap_directory}", websocket)
+            return False, f"Promptmap directory does not exist: {promptmap_directory}"
+        
+        # Check if promptmap2.py exists in the directory
+        promptmap_script = os.path.join(promptmap_directory, "promptmap2.py")
+        if not os.path.exists(promptmap_script):
+            await manager.send_personal_message(f"❌ promptmap2.py not found in directory: {promptmap_directory}", websocket)
+            return False, f"promptmap2.py not found in directory: {promptmap_directory}"
 
         # Set environment variables to fix Unicode issues
         env = os.environ.copy()
         env['PYTHONIOENCODING'] = 'utf-8'
         env['PYTHONUTF8'] = '1'
 
-        # Start the process with proper encoding handling
+        # Change to the promptmap directory and start the process
+        await manager.send_personal_message(f"📂 Changing to directory: {promptmap_directory}", websocket)
         process = await asyncio.create_subprocess_exec(
             *command,
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.STDOUT,
-            env=env
+            env=env,
+            cwd=promptmap_directory  # Change to the specified directory
         )
 
         # Stream output in real-time
