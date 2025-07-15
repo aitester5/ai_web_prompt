@@ -71,6 +71,11 @@ const ScanWizard = () => {
       return;
     }
 
+    if (selectedTool === "promptmap" && !promptmapDirectory.trim()) {
+      setError("Please enter the Promptmap directory path");
+      return;
+    }
+
     setLoading(true);
     setError("");
 
@@ -81,11 +86,16 @@ const ScanWizard = () => {
         tool: selectedTool.toLowerCase()
       };
 
-      // Only add probes if Garak is selected
+      // Add probes if Garak is selected
       if (selectedTool === "garak") {
         scanData.probes = selectedProbes;
       } else {
         scanData.probes = []; // Empty array for promptmap
+      }
+
+      // Add promptmap directory if Promptmap is selected
+      if (selectedTool === "promptmap") {
+        scanData.promptmap_directory = promptmapDirectory;
       }
 
       const response = await axios.post(`${API}/scan`, scanData);
